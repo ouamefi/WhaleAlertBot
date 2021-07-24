@@ -1,0 +1,56 @@
+[
+    {
+        "name": "Augury",
+        "mc_address": "0x6ad70613d14c34aa69E1604af91c39e0591a132e",
+        "pools": [
+            {
+                "id": 0,
+                "name": "OMEN",
+                "address": "0x76e63a3E7Ba1e2E61D3DA86a87479f983dE89a7E",
+                "alert_amount": 40000
+            },
+            {
+                "id": 1,
+                "name": "OMEN-USDC",
+                "address": "0x50409De292f5F821888702e9538Bf15Fa273dFE6",
+                "alert_amount": 0.02
+            },
+            {
+                "id": 17,
+                "name": "OMEN-WETH",
+                "address": "0xd7217619279F31DA063D738Cf1Bf7435764a07D9",
+                "alert_amount": 400
+            },
+            {
+                "id": 18,
+                "name": "OMEN-WMATIC",
+                "address": "0xe9Bb87c33d1607B06fb3988b31E9601BD21Ff3bD",
+                "alert_amount": 7000
+            }
+        ]
+    },
+    {
+        "name": "Iron",
+        "mc_address": "0x1fD1259Fa8CdC60c6E8C86cfA592CA1b8403DFaD",
+        "pools": [
+            {
+                "id": 0,
+                "name": "IS3USD",
+                "alert_amount": 200000,
+                "harvest_alert_amount": 100000
+            },
+            {
+                "id": 1,
+                "name": "ICE-WETH",
+                "alert_amount": 200000,
+                "harvest_alert_amount": 100000
+            },
+            {
+                "id": 2,
+                "name": "ICE-USDC",
+                "alert_amount": 5,
+                "harvest_alert_amount": 100000
+            }
+        ]
+    }
+]
