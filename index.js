@@ -40,7 +40,7 @@ function listenToPools() {
 }
 
 function toLink(address) {
-    return `<https://apeboard.finance/dashboard/${address}>`;
+    return `<https://apeboard.finance/dashboard/${address}>`; // <> are used to disable link preview
 }
 
 function listenToContractPools(mcContractAddress) {
