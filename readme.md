@@ -20,7 +20,7 @@ It then posts on the given discord channel and logs in the console if the amount
 
 If the address is a known whale (is in `whales.json`) then it also logs the `name` that's associated with it.
 
-## Limitations and todos
+## Limitations
 This version only works with AuguryFinance and IronFinance's masterchef contracts.
 
 ## Todo

@@ -1,7 +1,7 @@
 const fs = require('fs');
 const dotenv = require('dotenv');
 dotenv.config();
-const keepAlive = require("./server")
+const keepAlive = require("./server/server")
 const ethers = require('ethers');
 const Discord = require('discord.js');
 
