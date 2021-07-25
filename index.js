@@ -6,16 +6,17 @@ const ethers = require('ethers');
 const Discord = require('discord.js');
 
 const provider = new ethers.providers.WebSocketProvider(process.env.WS_URL);
-const auguryMcAbi = loadObjectsFromJsonFile("AuguryMcAbi.json");
-const abiIron = loadObjectsFromJsonFile("IronMcAbi.json");
+const auguryMcAbi = loadObjectsFromJsonFile("./abi/AuguryMcAbi.json");
+const ironAbi = loadObjectsFromJsonFile("./abi/IronMcAbi.json");
+const platforms = loadObjectsFromJsonFile('./data/platforms.json');
 
 //Discord bot
 const client = new Discord.Client();
 client.login(process.env.BOT_TOKEN);
 
-function loadObjectsFromJsonFile(fileName) {
+function loadObjectsFromJsonFile(path) {
     try {
-        return JSON.parse(fs.readFileSync('./' + fileName));
+        return JSON.parse(fs.readFileSync(path));
     } catch (err) {
         console.log(err)
     }
@@ -31,7 +32,6 @@ function listenToPools() {
     console.log("Started!");
     console.log("Monitoring pools: ");
 
-    const platforms = loadObjectsFromJsonFile('platforms.json');
     for (platform of platforms) {
         console.log(`-> ${platform.name}: ${platform.pools.map(p => p.name).join(', ')}`);
 
@@ -45,8 +45,10 @@ function toLink(address) {
 
 function listenToContractPools(mcContractAddress) {
     var mcContract = new ethers.Contract(mcContractAddress, auguryMcAbi, provider);
-    if (mcContractAddress === "0x1fD1259Fa8CdC60c6E8C86cfA592CA1b8403DFaD") {
-        mcContract = new ethers.Contract(mcContractAddress, abiIron, provider);
+    const ironMcAddress = "0x1fD1259Fa8CdC60c6E8C86cfA592CA1b8403DFaD";
+
+    if (mcContractAddress === ironMcAddress) {
+        mcContract = new ethers.Contract(mcContractAddress, ironAbi, provider);
     }
     
     //Unstaking event
@@ -96,7 +98,7 @@ function listenToContractPools(mcContractAddress) {
     });
 
     //Harvesting event (IronFinance)
-    if (mcContractAddress === "0x1fD1259Fa8CdC60c6E8C86cfA592CA1b8403DFaD") {
+    if (mcContractAddress === ironMcAddress) {
         mcContract.on("Harvest", (user, pid, amount) => {
             const platformMCAddress = mcContract.address;
             const pool = getPoolIfExists(pid, platformMCAddress);
@@ -121,7 +123,7 @@ function listenToContractPools(mcContractAddress) {
 }
 
 function getWhaleIfExists(address) {
-    const whales = loadObjectsFromJsonFile('whales.json');
+    const whales = loadObjectsFromJsonFile('./data/whales.json');
 
     for (whale of whales) {
         if (whale.address.toString() === address.toString()) {
@@ -133,7 +135,7 @@ function getWhaleIfExists(address) {
 }
 
 function getPoolIfExists(pid, platformMCAddress) {
-    const platforms = loadObjectsFromJsonFile('platforms.json');
+    const platforms = loadObjectsFromJsonFile('./data/platforms.json');
 
     for (platform of platforms) {
         for (pool of platform.pools) {
