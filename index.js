@@ -1,7 +1,7 @@
 const fs = require('fs');
 const dotenv = require('dotenv');
 dotenv.config();
-const keepAlive = require("./server/server")
+//const keepAlive = require("./server/server"); //workaround to keep the bot running on replit
 const ethers = require('ethers');
 const Discord = require('discord.js');
 
@@ -172,6 +172,7 @@ function postOnDiscordChannel(message, channelName) {
   channel.send(message);
 }
 
-keepAlive();
+// keepAlive(); // For replit, not needed if you run the bot on your own computer/server
+
 listenToPools();
 
