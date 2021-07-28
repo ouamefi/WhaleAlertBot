@@ -60,7 +60,7 @@
             {
                 "id": 10,
                 "name": "DINO-USDC",
-                "alert_amount": 0.001
+                "alert_amount": 0.002
             },
             {
                 "id": 11,
