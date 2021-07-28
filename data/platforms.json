@@ -52,5 +52,21 @@
                 "harvest_alert_amount": 100000
             }
         ]
+    },
+    {
+        "name": "DinoSwap",
+        "mc_address": "0x1948abC5400Aa1d72223882958Da3bec643fb4E5",
+        "pools": [
+            {
+                "id": 10,
+                "name": "DINO-USDC",
+                "alert_amount": 0.001
+            },
+            {
+                "id": 11,
+                "name": "DINO-WETH",
+                "alert_amount": 500
+            }
+        ]
     }
 ]

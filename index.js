@@ -49,53 +49,53 @@ function listenToContractPools(mcContractAddress) {
 
     if (mcContractAddress === ironMcAddress) {
         mcContract = new ethers.Contract(mcContractAddress, ironAbi, provider);
+    } else {
+        //Unstaking event
+        mcContract.on("Withdraw", (user, pid, amount) => {
+            const platformMCAddress = mcContract.address;
+            const pool = getPoolIfExists(pid, platformMCAddress);
+            const whale = getWhaleIfExists(user);
+
+            if (pool != null && amount.gte(ethers.utils.parseUnits(''+pool.alert_amount))) {
+                let message = '';
+                if (whale != null) {
+                    console.log(`[${getCurrentDateTime()}] ${user} (${whale.name}) unstaked ${formatAmount(amount)} from ${pool.name} pool`);
+
+                    message = new Discord.MessageEmbed().setDescription(`[${user}](${toLink(user)}) (${whale.name}) unstaked **${formatAmount(amount)}** from **${pool.name}** pool`);
+                }
+                else {
+                    console.log(`[${getCurrentDateTime()}] ${user} unstaked ${formatAmount(amount)} from ${pool.name.toString()} pool`);
+                    
+                    message = new Discord.MessageEmbed().setDescription(`[${user}](${toLink(user)}) unstaked **${formatAmount(amount)}** from **${pool.name}** pool`);
+                }
+
+                postOnDiscordChannel(message, '🐳whale-watching');
+            }
+        });
+
+        //Staking event
+        mcContract.on("Deposit", (user, pid, amount) => {
+            const platformMCAddress = mcContract.address;
+            const pool = getPoolIfExists(pid, platformMCAddress);
+            const whale = getWhaleIfExists(user);
+
+            if (pool != null && amount.gte(ethers.utils.parseUnits(''+pool.alert_amount))) {
+                let message = '';
+                if (whale != null) {
+                    console.log(`[${getCurrentDateTime()}] ${user} (${whale.name}) staked ${formatAmount(amount)} in ${pool.name} pool`);
+
+                    message = new Discord.MessageEmbed().setDescription(`[${user}](${toLink(user)}) (${whale.name}) staked **${formatAmount(amount)}** in **${pool.name}** pool`);
+                }
+                else {
+                    console.log(`[${getCurrentDateTime()}] ${user} staked ${formatAmount(amount)} in ${pool.name} pool`);
+
+                    message = new Discord.MessageEmbed().setDescription(`[${user}](${toLink(user)}) staked **${formatAmount(amount)}** in **${pool.name}** pool`);
+                }
+
+                postOnDiscordChannel(message, '🐳whale-watching');
+            }
+        });
     }
-    
-    //Unstaking event
-    mcContract.on("Withdraw", (user, pid, amount) => {
-        const platformMCAddress = mcContract.address;
-        const pool = getPoolIfExists(pid, platformMCAddress);
-        const whale = getWhaleIfExists(user);
-
-        if (pool != null && amount.gte(ethers.utils.parseUnits(''+pool.alert_amount))) {
-            let message = '';
-            if (whale != null) {
-                console.log(`[${getCurrentDateTime()}] ${user} (${whale.name}) unstaked ${formatAmount(amount)} from ${pool.name} pool`);
-
-                message = new Discord.MessageEmbed().setDescription(`[${user}](${toLink(user)}) (${whale.name}) unstaked **${formatAmount(amount)}** from **${pool.name}** pool`);
-            }
-            else {
-                console.log(`[${getCurrentDateTime()}] ${user} unstaked ${formatAmount(amount)} from ${pool.name.toString()} pool`);
-                
-                message = new Discord.MessageEmbed().setDescription(`[${user}](${toLink(user)}) unstaked **${formatAmount(amount)}** from **${pool.name}** pool`);
-            }
-
-            postOnDiscordChannel(message, '🐳whale-watching');
-        }
-    });
-
-    //Staking event
-    mcContract.on("Deposit", (user, pid, amount) => {
-        const platformMCAddress = mcContract.address;
-        const pool = getPoolIfExists(pid, platformMCAddress);
-        const whale = getWhaleIfExists(user);
-
-        if (pool != null && amount.gte(ethers.utils.parseUnits(''+pool.alert_amount))) {
-            let message = '';
-            if (whale != null) {
-                console.log(`[${getCurrentDateTime()}] ${user} (${whale.name}) staked ${formatAmount(amount)} in ${pool.name} pool`);
-
-                message = new Discord.MessageEmbed().setDescription(`[${user}](${toLink(user)}) (${whale.name}) staked **${formatAmount(amount)}** in **${pool.name}** pool`);
-            }
-            else {
-                console.log(`[${getCurrentDateTime()}] ${user} staked ${formatAmount(amount)} in ${pool.name} pool`);
-
-                message = new Discord.MessageEmbed().setDescription(`[${user}](${toLink(user)}) staked **${formatAmount(amount)}** in **${pool.name}** pool`);
-            }
-
-            postOnDiscordChannel(message, '🐳whale-watching');
-        }
-    });
 
     //Harvesting event (IronFinance)
     if (mcContractAddress === ironMcAddress) {
